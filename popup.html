@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ghost Browser</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 280px;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0d0d1a;
+      color: #e0e0ff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .ghost-icon {
+      font-size: 64px;
+      line-height: 1;
+      margin-bottom: 8px;
+      animation: float 3s ease-in-out infinite;
+      display: block;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #c8b6ff;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 11px;
+      color: #7a7aaa;
+      margin-bottom: 20px;
+    }
+
+    /* Status badge */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #1a1a2e;
+      border: 1px solid #333366;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      margin-bottom: 20px;
+      transition: all 0.3s;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #444466;
+    }
+
+    .status-badge.active .status-dot {
+      background: #a855f7;
+      animation: flicker 1.2s ease-in-out infinite;
+      box-shadow: 0 0 6px #a855f7;
+    }
+
+    .status-badge.active {
+      border-color: #a855f7;
+      color: #c8b6ff;
+    }
+
+    /* Progress bar */
+    .progress-wrap {
+      background: #1a1a2e;
+      border-radius: 10px;
+      height: 6px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #7c3aed, #a855f7);
+      border-radius: 10px;
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+
+    .progress-label {
+      font-size: 10px;
+      color: #55557a;
+      margin-bottom: 20px;
+    }
+
+    /* Button */
+    #toggleBtn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.25s;
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    #toggleBtn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px #7c3aed88;
+    }
+
+    #toggleBtn.stop-mode {
+      background: linear-gradient(135deg, #991b1b, #7f1d1d);
+    }
+
+    #toggleBtn.stop-mode:hover {
+      box-shadow: 0 4px 16px #99000055;
+    }
+
+    .warning {
+      font-size: 10px;
+      color: #55556a;
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <span class="ghost-icon">👻</span>
+  <h1>Ghost Browser</h1>
+  <p class="subtitle">spooky tab automation prank</p>
+
+  <div class="status-badge" id="statusBadge">
+    <span class="status-dot"></span>
+    <span id="statusText">Dormant</span>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <p class="progress-label" id="progressLabel">Step 0 / 0</p>
+
+  <button id="toggleBtn">Unleash Ghost</button>
+
+  <p class="warning">
+    ⚠️ The ghost will start opening tabs on its own.<br>
+    Click again to banish it.
+  </p>
+
+  <script src="popup.js"></script>
+</body>
+</html>

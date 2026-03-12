@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Ghost Browser 👻",
+  "version": "1.0",
+  "description": "A spooky ghost that browses the web on its own...",
+  "permissions": ["tabs", "alarms", "storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "128": "icon.svg"
+    }
+  },
+  "icons": {
+    "128": "icon.svg"
+  }
+}
