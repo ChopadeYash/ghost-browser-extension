@@ -36,9 +36,9 @@ async function runNextStep() {
   ghostTabIds  = state.ghostTabIds;
   isRunning    = true;
 
+  // If we somehow reached the end, wrap around to the beginning (loop mode)
   if (stepIndex >= GHOST_SEQUENCE.length) {
-    await stopGhost();
-    return;
+    stepIndex = 0;
   }
 
   const step = GHOST_SEQUENCE[stepIndex];
@@ -67,15 +67,16 @@ async function runNextStep() {
   }
 
   stepIndex++;
+  // Wrap index if we reached the end so the sequence loops forever
+  if (stepIndex >= GHOST_SEQUENCE.length) {
+    stepIndex = 0;
+  }
+
   await saveState({ isRunning: true, stepIndex, ghostTabIds });
 
-  // Schedule the next step
-  if (stepIndex < GHOST_SEQUENCE.length) {
-    const nextDelay = GHOST_SEQUENCE[stepIndex].delay;
-    chrome.alarms.create("ghost_step", { delayInMinutes: nextDelay / 60000 });
-  } else {
-    await stopGhost();
-  }
+  // Always schedule the next step using the *next* step's delay
+  const nextDelay = GHOST_SEQUENCE[stepIndex].delay;
+  chrome.alarms.create("ghost_step", { delayInMinutes: nextDelay / 60000 });
 }
 
 // ── Start / Stop ─────────────────────────────────────────────────────────────
