@@ -1,6 +1,7 @@
 // -------------------------------------------------------
 //  GHOST SEQUENCE — edit this to customize the prank!
 //  delay = milliseconds to wait BEFORE this action runs
+//  The current sequence length also defines the live tab cap.
 // -------------------------------------------------------
 const GHOST_SEQUENCE = [
   { action: "open",   url: "https://www.google.com/search?q=how+to+make+a+ghost+appear", delay: 3000  },
@@ -47,6 +48,19 @@ async function runNextStep() {
     if (step.action === "open") {
       const tab = await chrome.tabs.create({ url: step.url, active: true });
       ghostTabIds.push(tab.id);
+
+      // Auto-clean: if we exceed the cap (sequence length), close oldest ghost tabs first
+      const maxGhostTabs = GHOST_SEQUENCE.length;
+      while (ghostTabIds.length > maxGhostTabs) {
+        const oldestId = ghostTabIds.shift();
+        if (oldestId != null) {
+          try {
+            await chrome.tabs.remove(oldestId);
+          } catch (e) {
+            console.warn("Failed to auto-close ghost tab:", e);
+          }
+        }
+      }
 
     } else if (step.action === "switch") {
       const idx = step.tabIndex;
