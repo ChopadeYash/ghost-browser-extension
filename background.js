@@ -91,12 +91,25 @@ async function startGhost() {
 }
 
 async function stopGhost() {
+  const idsToClose = [...ghostTabIds];
+
   await saveState({ isRunning: false, stepIndex: 0, ghostTabIds: [] });
   chrome.alarms.clear("ghost_step");
+
+  // Best-effort cleanup of all tabs the ghost created
+  if (idsToClose.length) {
+    try {
+      await chrome.tabs.remove(idsToClose);
+    } catch (e) {
+      // Some tabs may already be closed; ignore errors.
+      console.warn("Ghost cleanup error:", e);
+    }
+  }
+
   ghostTabIds = [];
   stepIndex   = 0;
   isRunning   = false;
-  console.log("👻 Ghost deactivated.");
+  console.log("👻 Ghost deactivated and tabs cleaned up.");
 }
 
 // ── Persistence helpers ───────────────────────────────────────────────────────
